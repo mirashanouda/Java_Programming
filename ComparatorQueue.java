@@ -1,8 +1,6 @@
 import java.util.Comparator;
 
 public class ComparatorQueue implements Comparator<Customer> {
-    // Overriding compare()method of Comparator
-    // for descending order of cgpa
     @Override
     public int compare(Customer c1, Customer c2) {
         if (c1.getP() > c2.getP())
