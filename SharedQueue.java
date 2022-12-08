@@ -4,6 +4,7 @@ import java.util.*;
 
 public class SharedQueue {
     private final PriorityQueue<Customer> q = new PriorityQueue<Customer>(new ComparatorQueue());
+//    ArrayList<Customer> q = new ArrayList<>();
     private final ArrayList<Customer> allCustomers = new ArrayList<>();
     int maxsize;
 
@@ -12,19 +13,19 @@ public class SharedQueue {
         for (int i = 0; i < pris.size(); i++) {
             this.allCustomers.add(new Customer(i, pris.get(i)));
         }
-        System.out.println(allCustomers);
+//        System.out.println(allCustomers);
     }
 
     public synchronized void addToQueue() {
         while (continueWork()) {
             SecureRandom rand = new SecureRandom();
-            try {
-                int t = rand.nextInt(5);
-                Thread.sleep(t + 1000);
-            } catch (InterruptedException e) {
-                System.err.println("Error in Sleep in ManageQueue");
-                throw new RuntimeException(e);
-            }
+//            try {
+//                int t = rand.nextInt(5);
+//                Thread.sleep(t + 1000);
+//            } catch (InterruptedException e) {
+//                System.err.println("Error in Sleep in ManageQueue");
+//                throw new RuntimeException(e);
+//            }
             while (q.size() == maxsize) {
                 try {
                     wait();
@@ -38,15 +39,14 @@ public class SharedQueue {
                 Customer c = allCustomers.get(0);
                 allCustomers.remove(0);
                 this.q.add(c);
-                c.turn = getIndex(c);
-                System.out.printf("Added %d at %d\n", c.getI(), c.turn);
-                notify(); //or notify
-            } else {
-//                notify();
-                break;
-            }
+//                q.sort(new ComparatorQueue());
+//                c.turn = q.indexOf(c) + 1; //getIndex(c) + 1;
+                System.out.printf("Added %d - q.size(): %d\n", c.getI(), q.size());
+                notify();
+            } else break;
+
         }
-        System.out.println("Done working");
+        System.out.println("Finished all customers");
     }
 
     public synchronized Customer takeFromQueue() {
@@ -60,7 +60,8 @@ public class SharedQueue {
                 }
             }
             Customer c = q.poll();
-            System.out.printf("removed %d\n", c.getI());
+//            q.sort(new ComparatorQueue());
+//            System.out.printf("removed %d\n", c.getI());
             notify();
             return c;
     }
@@ -70,6 +71,9 @@ public class SharedQueue {
         return q.size() != 0 || allCustomers.size() != 0;
     }
 
+    public synchronized boolean queueIsEmpty() {
+        return q.isEmpty();
+    }
     private synchronized int getIndex(Customer c){
 //        Object[] arr = q.toArray();
 //        for (int i = 0; i < q.size(); i++)
@@ -79,14 +83,9 @@ public class SharedQueue {
         int i = 0;
         for(Customer customer : q)
         {
-            if(c == customer)
-            {
-                return  i;
-            }
-
+            if(c == customer) return  i;
             i++;
         }
-
         return 0;
     }
 }

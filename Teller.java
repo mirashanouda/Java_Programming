@@ -12,18 +12,19 @@ public class Teller extends Thread {
 
     @Override
     public void run() {
-//        System.out.printf("-Start- processing customer %d with priority %d\n", c.getI(), c.getP());
+        Customer c;
         while (q.continueWork()) {
-            try {
-                int t = rand.nextInt(5);
-                Thread.sleep(t + 1000);
-            } catch (InterruptedException e) {
-                System.err.println("Error in Sleep");
-                throw new RuntimeException(e);
-            }
-            if (q.continueWork()) {
-                Customer c = q.takeFromQueue();
-                System.out.printf("-Finish- processing customer %d with priority %d -- by Teller %d\n", c.getI(), c.getP(), tNum);
+            if (!q.queueIsEmpty()) {
+                c = q.takeFromQueue();
+                System.out.printf("-Start- processing customer %d with priority %d -- by Teller %d\n", c.getI(), c.getP(), tNum);
+                try {
+                    int t = rand.nextInt(5) + 2;
+                    Thread.sleep(t + 1000);
+                    System.out.printf("-Finish- processing customer %d with priority %d -- by Teller %d\n", c.getI(), c.getP(), tNum);
+                } catch (InterruptedException e) {
+                    System.err.println("Error in Sleep");
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

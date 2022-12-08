@@ -54,6 +54,7 @@ public class Main {
             tellers[i] =  new Teller(i, q);
             tellers[i].start();
         }
-        ManageQueue queueSystem = new ManageQueue(q);
+        Thread queueSystem = new Thread(new ManageQueue(q));
+        queueSystem.start();
     }
 }

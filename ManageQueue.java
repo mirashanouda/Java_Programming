@@ -5,14 +5,14 @@ public class ManageQueue implements Runnable {
     private SharedQueue q;
     public ManageQueue(SharedQueue q){
         this.q = q;
-        Thread t = new Thread(this, "Queue Management Thread");
-        t.start(); // to start the thread once it's called
+//        Thread t = new Thread(this, "Queue Management Thread");
+//        t.start(); // to start the thread once it's called
     }
 
     @Override
     public void run() {
         System.out.println("Started adding to queue");
         q.addToQueue();
-        System.out.println("Done!");
+//        System.out.println("Done!");
     }
 }

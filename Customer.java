@@ -12,5 +12,4 @@ public class Customer {
     public int getP() {
         return p;
     }
-
 }
